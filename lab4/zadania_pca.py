@@ -4,6 +4,7 @@ import os
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 
 def pca_sklearn(data, n_comp=None):
@@ -20,7 +21,7 @@ def pca_sklearn(data, n_comp=None):
         n_comp = data.shape[1]
     # TODO: Implement PCA using scikit-learn library, class: sklearn.decomposition.PCA
     # TODO: Return the transformed data.
-    return None
+    return PCA(n_components=n_comp).fit_transform(data)
 
 
 
@@ -37,15 +38,16 @@ def pca_manual(data, n_comp=None):
         n_comp = data.shape[1]
 
     # TODO: 1) Adjust the data so that the mean of every column is equal to 0.
-
+    data = data - data.mean(axis=0)
 
 
     # TODO: 2) Compute the covariance matrix. You can use the function from numpy (numpy.cov), or multiply appropriate matrices.
     # Warning: numpy.cov expects dimensions to be in rows and different observations in columns.
     #          You can transpose data or set rowvar=False flag.
 
+    cov_matrix = np.cov(data.T)
     print("\nCOVARIANCE MATRIX:")
-    print("TODO")
+    print(cov_matrix)
 
 
 
@@ -53,33 +55,41 @@ def pca_manual(data, n_comp=None):
     # You may use np.linalg.eig, which returns a tuple (eigval, eigvec).
     # Make sure that eigenvectors are unit vectors (PCA needs unit vectors).
 
-
+    eigval, eigvec = np.linalg.eig(cov_matrix)
 
     # TODO: 4) Sort eigenvalues (and their corresponding eigenvectors) in the descending order (e.g. by using argsort),
     #          and construct the matrix K with eigenvectors in the columns.
 
+    order_eigval = np.argsort(eigval)[::-1]
+    sorted_vectors =  eigvec[:, order_eigval]
+    sorted_values = eigval[order_eigval]
+
     print("\nSORTED EIGEN VALUES:")
-    print("TODO")
+    print(sorted_values)
     print("\nSORTED EIGEN VECTORS:")
-    print("TODO")
+    print(sorted_vectors)
 
 
 
     # TODO: 5) Select the components (n_comp).
 
-
+    selected_comp = sorted_vectors[:n_comp]
+    print("SELECTED:")
+    print(selected_comp)
 
     # TODO: 6) Calculate the transformed data.
 
-
-
+    transformed = data.dot(selected_comp)
+    print("transformed:")
+    print(transformed)
+    # print(transformed)
     # TODO: 7) Calculate the covariance matrix of the transformed data.
 
-    print("\nCOVARIANCE MATRIX OF THE TRANSFORMED DATA:")
-    print("TODO")
-
+    cov_matrix_transformed =  np.cov(transformed.T)
+    print("\nCOVARIANCE MATRIX OF THE TRANSFORMED DATA:")    
+    print(cov_matrix_transformed)
     # TODO: 8) Return the transformed data.
-    return None
+    return transformed
 
 
 
