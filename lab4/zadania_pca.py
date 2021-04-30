@@ -74,15 +74,12 @@ def pca_manual(data, n_comp=None):
     # TODO: 5) Select the components (n_comp).
 
     selected_comp = sorted_vectors[:n_comp]
-    print("SELECTED:")
-    print(selected_comp)
 
     # TODO: 6) Calculate the transformed data.
 
     transformed = data.dot(selected_comp)
-    print("transformed:")
-    print(transformed)
-    # print(transformed)
+
+
     # TODO: 7) Calculate the covariance matrix of the transformed data.
 
     cov_matrix_transformed =  np.cov(transformed.T)
